@@ -26,14 +26,15 @@ router.post('/test', function(req, res, next) {
 });
 
 router.post('/upload', function(req, res, next) {
-  // if (!req.files)
-  //   return res.status(400).send('No files were uploaded.');
-  //
-  console.log("POST CALL");
-  let fileUploaded = req;
-  console.log(fileUploaded);
+  if (!req.files)
+    return res.status(400).send('No files were uploaded.');
+  console.log('files found.');
+  console.log(req.files);
 
-  // writePDF(fileUploaded, './seed/pdf/testing_file.pdf', res);
+  let fileUploaded = req.files;
+  console.log(fileUploaded['images[]']);
+
+  writePDF(fileUploaded, './seed/pdf/testing_file.pdf', res);
 
   // res.send('done');
   // fileUploaded.mv('./seed/img/img.jpg', function(err) {
@@ -51,7 +52,7 @@ function writePDF(fileUploaded, path, res) {
 
   writeStream.on("open", () => {
     console.log("Writing to " + encodeURIComponent(path));
-    res.send({helo: path}); //DEBUG
+    console.log("write success");
   });
   writeStream.on("error", (err) => {
       if (err.code == "EEXIST") {
@@ -67,7 +68,7 @@ function writePDF(fileUploaded, path, res) {
   });
 
   doc.pipe(writeStream);
-  doc.image(fileUploaded.data, 0, 0, {scale: 0.5});
+  doc.image(fileUploaded['images[]'].data, 0, 0, {scale: 0.5});
   doc.end();
 
 }
