@@ -53,6 +53,7 @@ function writePDF(fileUploaded, path, res) {
   writeStream.on("open", () => {
     console.log("Writing to " + encodeURIComponent(path));
     console.log("write success");
+    res.send("Upload and create pdf success.")
   });
   writeStream.on("error", (err) => {
       if (err.code == "EEXIST") {
